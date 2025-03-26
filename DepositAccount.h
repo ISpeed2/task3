@@ -6,7 +6,7 @@
 
 class DepositAccount : public Account {
 public:
-    DepositAccount(std::string account_id, Client* client, double initialBalance, std::time_t expirationDate);
+    DepositAccount(std::string account_id, Client* client, double initialBalance, long expirationDate);
 
     void deposit(double amount) override;
     bool withdraw(double amount) override;
