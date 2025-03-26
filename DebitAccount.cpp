@@ -1,4 +1,4 @@
-﻿#include "DebitAccount.h"
+#include "DebitAccount.h"
 #include "Exceptions.h"
 
 DebitAccount::DebitAccount(std::string account_id, Client* client, double initialBalance, double interestRate)
@@ -7,8 +7,7 @@ DebitAccount::DebitAccount(std::string account_id, Client* client, double initia
 void DebitAccount::deposit(double amount) {
     if (amount > 0) {
         balance += amount;
-    }
-    else {
+    } else {
         throw std::invalid_argument("Deposit amount must be positive.");
     }
 }
@@ -17,8 +16,7 @@ bool DebitAccount::withdraw(double amount) {
     if (amount > 0 && balance >= amount) {
         balance -= amount;
         return true;
-    }
-    else {
+    } else {
         throw InsufficientFundsException("Insufficient funds for withdrawal.");
         return false;
     }
