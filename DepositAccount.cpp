@@ -1,15 +1,14 @@
-﻿#include "DepositAccount.h"
+#include "DepositAccount.h"
 #include "Exceptions.h"
-#include "TimeService.h" // Для доступа к текущему времени
+#include "TimeService.h"
 
-DepositAccount::DepositAccount(std::string account_id, Client* client, double initialBalance, std::time_t expirationDate)
+DepositAccount::DepositAccount(std::string account_id, Client* client, double initialBalance, long expirationDate)
     : Account(account_id, client, initialBalance), expirationDate(expirationDate) {}
 
 void DepositAccount::deposit(double amount) {
     if (amount > 0) {
         balance += amount;
-    }
-    else {
+    } else {
         throw std::invalid_argument("Deposit amount must be positive.");
     }
 }
@@ -19,13 +18,11 @@ bool DepositAccount::withdraw(double amount) {
         if (amount > 0 && balance >= amount) {
             balance -= amount;
             return true;
-        }
-        else {
+        } else {
             throw InsufficientFundsException("Insufficient funds for withdrawal.");
             return false;
         }
-    }
-    else {
+    } else {
         throw TransactionFailedException("Cannot withdraw before expiration date.");
         return false;
     }
