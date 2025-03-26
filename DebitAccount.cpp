@@ -1,10 +1,10 @@
-#include "DebitAccount.h"
+#include "CreditAccount.h"
 #include "Exceptions.h"
 
-DebitAccount::DebitAccount(std::string account_id, Client* client, double initialBalance, double interestRate)
-    : Account(account_id, client, initialBalance), interestRate(interestRate) {}
+CreditAccount::CreditAccount(std::string account_id, Client* client, double initialBalance, double creditLimit, double fee)
+    : Account(account_id, client, initialBalance), creditLimit(creditLimit), fee(fee) {}
 
-void DebitAccount::deposit(double amount) {
+void CreditAccount::deposit(double amount) {
     if (amount > 0) {
         balance += amount;
     } else {
@@ -12,36 +12,38 @@ void DebitAccount::deposit(double amount) {
     }
 }
 
-bool DebitAccount::withdraw(double amount) {
-    if (amount > 0 && balance >= amount) {
+bool CreditAccount::withdraw(double amount) {
+    if (amount > 0 && (balance + creditLimit) >= amount) {
         balance -= amount;
         return true;
     } else {
-        throw InsufficientFundsException("Insufficient funds for withdrawal.");
+        throw InsufficientFundsException("Exceeds credit limit.");
         return false;
     }
 }
 
-double DebitAccount::getBalance() const {
+double CreditAccount::getBalance() const {
     return balance;
 }
 
-std::string DebitAccount::getAccountId() const {
+std::string CreditAccount::getAccountId() const {
     return account_id;
 }
 
-Client* DebitAccount::getClient() const {
+Client* CreditAccount::getClient() const {
     return client;
 }
 
-void DebitAccount::applyInterest() {
-    balance += balance * interestRate;
+void CreditAccount::applyInterest() {
+    // No interest on credit accounts
 }
 
-void DebitAccount::applyFee() {
-    // No fees for debit accounts
+void CreditAccount::applyFee() {
+    if (balance < 0) {
+        balance -= fee;
+    }
 }
 
-void DebitAccount::undoTransaction(double amount) {
-    balance += amount;
+void CreditAccount::undoTransaction(double amount) {
+        balance += amount;
 }
